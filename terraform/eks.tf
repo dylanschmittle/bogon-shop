@@ -1,38 +1,39 @@
-# module "eks_blueprints_addons" {
-#   source  = "aws-ia/eks-blueprints-addons/aws"
-#   version = "~> 1.0" #ensure to update this to the latest/desired version
-#
-#   cluster_name      = "my-cluster"
-#   cluster_endpoint  = "public"
-#   cluster_version   = "1.27"
-#   oidc_provider_arn = "arn:aws:iam::754977136847:policy/AWSLoadBalancerControllerIAMPolicy"
-#
-#   eks_addons = {
-#     aws-ebs-csi-driver = {
-#       most_recent = true
-#     }
-#     coredns = {
-#       most_recent = true
-#     }
-#     vpc-cni = {
-#       most_recent = true
-#     }
-#     kube-proxy = {
-#       most_recent = true
-#     }
-#   }
-#   enable_ingress_nginx                   = true
-#   enable_aws_load_balancer_controller    = true
-#   enable_cluster_proportional_autoscaler = true
-#   enable_karpenter                       = true
-#   enable_kube_prometheus_stack           = true
-#   enable_metrics_server                  = true
-#   enable_external_dns                    = true
-#   enable_cert_manager                    = true
-#   cert_manager_route53_hosted_zone_arns  = ["arn:aws:route53:::hostedzone/Z08477012TVCGJOXMCH3Q"]
-#
-#   tags = {
-#     Root_Domain = "my.bogon.shop"
-#     Environment = "dev"
-#   }
-# }
+module "eks_blueprints" {
+  source = "github.com/aws-ia/terraform-aws-eks-blueprints?ref=v4.0.2"
+
+  # EKS Cluster VPC and Subnet mandatory config
+  vpc_id             = "vpc-0f35cbb8f2dd42c7b"
+  private_subnet_ids = ["subnet-0626f9f06691ac1ec" "subnet-0ef49c41c01d22502"]
+
+  # EKS CLUSTER VERSION
+  cluster_version = "1.21"
+
+  # EKS MANAGED NODE GROUPS
+  managed_node_groups = {
+    mg_5 = {
+      node_group_name = "managed-ondemand"
+      instance_types  = ["m5.large"]
+      min_size        = "2"
+    }
+  }
+}
+
+# Add-ons
+module "kubernetes_addons" {
+  source = "github.com/aws-ia/terraform-aws-eks-blueprints//modules/kubernetes-addons?ref=v4.0.2"
+
+  eks_cluster_id = module.eks_blueprints.eks_cluster_id
+
+  # EKS Add-ons
+  enable_amazon_eks_vpc_cni            = true
+  enable_amazon_eks_coredns            = true
+  enable_amazon_eks_kube_proxy         = true
+  enable_amazon_eks_aws_ebs_csi_driver = true
+
+  # Self-managed Add-ons
+  enable_aws_for_fluentbit            = true
+  enable_aws_load_balancer_controller = true
+  enable_aws_efs_csi_driver           = true
+  enable_cluster_autoscaler           = true
+  enable_metrics_server               = true
+}
