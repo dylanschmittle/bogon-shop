@@ -3,7 +3,7 @@ module "eks_blueprints" {
 
   # EKS Cluster VPC and Subnet mandatory config
   vpc_id             = "vpc-0f35cbb8f2dd42c7b"
-  private_subnet_ids = ["subnet-0626f9f06691ac1ec" "subnet-0ef49c41c01d22502"]
+  private_subnet_ids = ["subnet-0626f9f06691ac1ec", "subnet-0ef49c41c01d22502"]
 
   # EKS CLUSTER VERSION
   cluster_version = "1.21"
