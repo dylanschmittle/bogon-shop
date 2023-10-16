@@ -14,7 +14,7 @@ module "eks_data_addons" {
   enable_nvidia_gpu_operator = true
 
   # Example to deploy Spark Operator Helm Chart
-  enable_spark_opertor = true
+  # enable_spark_opertor = true
 
   # Example to deploy Flink Operator Helm Chart
   enable_flink_operator = true
