@@ -5,10 +5,10 @@ module "eks_data_addons" {
   oidc_provider_arn = module.eks.oidc_provider_arn
 
   # Example to deploy AWS Neuron Device Plugin for Trainium and Inferentia instances
-  enable_aws_efa_k8s_device_plugin = true
+  #enable_aws_efa_k8s_device_plugin = true
 
   # Example to deploy EFA K8s Device Plugin for GPU/Neuron instances
-  enable_aws_efa_k8s_device_plugin = true
+  #enable_aws_efa_k8s_device_plugin = true
 
   # Example to deploy NVIDIA GPU Operator
   enable_nvidia_gpu_operator = true
