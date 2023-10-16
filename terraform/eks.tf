@@ -1,39 +1,44 @@
-module "eks_blueprints" {
-  source = "github.com/aws-ia/terraform-aws-eks-blueprints?ref=v4.0.2"
+module "eks_data_addons" {
+  source = "aws-ia/eks-data-addons/aws"
+  version = "~> 1.0" # ensure to update this to the latest/desired version
 
-  # EKS Cluster VPC and Subnet mandatory config
-  vpc_id             = "vpc-0f35cbb8f2dd42c7b"
-  private_subnet_ids = ["subnet-0626f9f06691ac1ec", "subnet-0ef49c41c01d22502"]
+  oidc_provider_arn = module.eks.oidc_provider_arn
 
-  # EKS CLUSTER VERSION
-  cluster_version = "1.21"
+  # Example to deploy AWS Neuron Device Plugin for Trainium and Inferentia instances
+  enable_aws_efa_k8s_device_plugin = true
 
-  # EKS MANAGED NODE GROUPS
-  managed_node_groups = {
-    mg_5 = {
-      node_group_name = "managed-ondemand"
-      instance_types  = ["m5.large"]
-      min_size        = "2"
-    }
+  # Example to deploy EFA K8s Device Plugin for GPU/Neuron instances
+  enable_aws_efa_k8s_device_plugin = true
+
+  # Example to deploy NVIDIA GPU Operator
+  enable_nvidia_gpu_operator = true
+
+  # Example to deploy Spark Operator Helm Chart
+  enable_spark_opertor = true
+
+  # Example to deploy Flink Operator Helm Chart
+  enable_flink_operator = true
+
+  # Example to deploy Apache YuniKorn Helm Chart
+  enable_yunikorn = true
+
+  # Example that uses ECR authentication for a particular registry ID
+  enable_emr_spark_operator = var.enable_emr_spark_operator
+  emr_spark_operator_helm_config = {
+    repository_username = data.aws_ecr_authorization_token.token.user_name
+    repository_password = data.aws_ecr_authorization_token.token.password
+  }
+
+  # Example to deploy Helm chart that uses IAM Role for ServiceAccounts. You can disable `create_irsa` and bring your own IAM role.
+  enable_spark_history_server = var.enable_emr_spark_operator
+  spark_history_server_helm_config = {
+    create_irsa = true
+    values = [
+      templatefile("${path.module}/test/helm-values/spark-history-server-values.yaml", {
+        s3_bucket_name   = module.s3_bucket.s3_bucket_id
+        s3_bucket_prefix = aws_s3_object.this.key
+      })
+    ]
   }
 }
 
-# Add-ons
-module "kubernetes_addons" {
-  source = "github.com/aws-ia/terraform-aws-eks-blueprints//modules/kubernetes-addons?ref=v4.0.2"
-
-  eks_cluster_id = module.eks_blueprints.eks_cluster_id
-
-  # EKS Add-ons
-  enable_amazon_eks_vpc_cni            = true
-  enable_amazon_eks_coredns            = true
-  enable_amazon_eks_kube_proxy         = true
-  enable_amazon_eks_aws_ebs_csi_driver = true
-
-  # Self-managed Add-ons
-  enable_aws_for_fluentbit            = true
-  enable_aws_load_balancer_controller = true
-  enable_aws_efs_csi_driver           = true
-  enable_cluster_autoscaler           = true
-  enable_metrics_server               = true
-}
