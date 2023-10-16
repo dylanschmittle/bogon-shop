@@ -3,9 +3,9 @@ module "eks_blueprints_addons" {
   version = "~> 1.0" #ensure to update this to the latest/desired version
 
   cluster_name      = "my-cluster"
-  cluster_endpoint  = ""
+  cluster_endpoint  = "public"
   cluster_version   = "1.27"
-  oidc_provider_arn = ""
+  oidc_provider_arn = "arn:aws:iam::754977136847:policy/AWSLoadBalancerControllerIAMPolicy"
 
   eks_addons = {
     aws-ebs-csi-driver = {
