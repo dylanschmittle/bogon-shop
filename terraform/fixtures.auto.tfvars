@@ -59,20 +59,20 @@ addons = [
 ]
 ## helm related
 
-repository = "https://aws.github.io/eks-charts/"
+#repository = "https://aws.github.io/eks-charts/"
 
-chart = "aws-node-termination-handler"
+#chart = "aws-node-termination-handler"
 
-chart_version = "0.21.0"
+#chart_version = "0.21.0"
 
-create_namespace = true
+#create_namespace = true
 
-kubernetes_namespace = "test"
+#kubernetes_namespace = "test"
 
-atomic = true
+#atomic = true
 
-cleanup_on_fail = true
+#cleanup_on_fail = true
 
-timeout = 300
+#timeout = 300
 
-wait = true
+#wait = true
