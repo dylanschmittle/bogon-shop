@@ -5,7 +5,7 @@ module "jitsi" {
   name = "jitsi"
 
   repository    = "https://jitsi-contrib.github.io/jitsi-helm/"
-  chart         = "jitsi-helm"
+  chart         = "jitsi"
   chart_version = "1.3.7"
 
   create_namespace     = true
