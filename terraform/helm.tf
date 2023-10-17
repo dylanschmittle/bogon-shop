@@ -17,8 +17,9 @@ module "jitsi" {
   wait            = true
 
   # These values will be deep merged
-  # values = [
-  # ]
+  values = [
+    file("${path.module}/jitsi-values.yaml")
+  ]
 
   # Enable the IAM role
   iam_role_enabled            = true
