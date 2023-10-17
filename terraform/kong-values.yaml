@@ -387,7 +387,7 @@ proxy:
 # You should enable this Service if you proxy UDP traffic, and configure UDP stream listens under it
 udpProxy:
   # Enable creating a Kubernetes service for UDP proxying
-  enabled: true
+  enabled: false
   type: LoadBalancer
   loadBalancerClass:
   # To specify annotations or labels for the proxy service, add them to the respective
