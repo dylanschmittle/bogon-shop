@@ -6,7 +6,7 @@ module "kong" {
 
   repository    = "https://charts.konghq.com"
   chart         = "kong"
-  chart_version = "0.7.0"
+  chart_version = "3.3"
 
   create_namespace     = true
   kubernetes_namespace = "kong"

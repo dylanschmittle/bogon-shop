@@ -6,7 +6,7 @@ module "gitea" {
 
   repository    = "https://dl.gitea.com/charts/"
   chart         = "gitea"
-  chart_version = "1.20.5"
+  chart_version = "9.5.1"
 
   create_namespace     = true
   kubernetes_namespace = "gitea"
