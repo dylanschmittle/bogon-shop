@@ -17,7 +17,7 @@ cluster_log_retention_period = 7
 
 instance_types = ["t3.medium"]
 
-desired_size = 2
+desired_size = 3
 
 max_size = 3
 
@@ -61,7 +61,7 @@ addons = [
     addon_version               = null
     resolve_conflicts_on_create = "NONE"
     resolve_conflicts_on_update = "NONE"
-    service_account_role_arn    = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+    service_account_role_arn    = null
   },
 
   {
@@ -69,7 +69,7 @@ addons = [
     addon_version               = null
     resolve_conflicts_on_create = "NONE"
     resolve_conflicts_on_update = "NONE"
-    service_account_role_arn    = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+    service_account_role_arn    = null
   },
 
 ]
