@@ -10,3 +10,21 @@ volumeBindingMode: WaitForFirstConsumer
 parameters:
   type: gp3
 ---
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshotClass
+metadata:
+  name: ebs-csi-aws
+driver: ebs.csi.aws.com
+deletionPolicy: Delete
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: ebs-gp2-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: gp2
