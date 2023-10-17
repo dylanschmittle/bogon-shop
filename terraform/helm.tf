@@ -1,12 +1,11 @@
 module "jitsi" {
   source = "cloudposse/helm-release/aws"
-  # Cloud Posse recommends pinning every module to a specific version
-  # version = "x.x.x"
+  version = "0.10.1"
 
   name = "jitsi"
 
   repository    = "https://jitsi-contrib.github.io/jitsi-helm/"
-  chart         = "raw"
+  chart         = "jitsi-helm"
   chart_version = "1.3.7"
 
   create_namespace     = true
@@ -23,7 +22,9 @@ module "jitsi" {
 
   # Enable the IAM role
   iam_role_enabled            = true
+  
   eks_cluster_oidc_issuer_url = module.eks_cluster.eks_cluster_identity_oidc_issuer
+  
   # Add the IAM role using set()
   service_account_role_arn_annotation_enabled = true
 
