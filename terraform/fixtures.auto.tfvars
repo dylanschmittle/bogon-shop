@@ -27,25 +27,6 @@ kubernetes_labels = {}
 
 cluster_encryption_config_enabled = true
 
-## helm related
-
-repository = "https://aws.github.io/eks-charts/"
-
-chart = "aws-node-termination-handler"
-
-chart_version = "0.21.0"
-
-create_namespace = true
-
-kubernetes_namespace = "test"
-
-atomic = true
-
-cleanup_on_fail = true
-
-timeout = 300
-
-wait = true
 
 # When updating the Kubernetes version, also update the API and client-go version in test/src/go.mod
 kubernetes_version = "1.26"
