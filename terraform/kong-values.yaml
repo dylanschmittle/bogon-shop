@@ -275,13 +275,13 @@ proxy:
   nameOverride: ""
   # To specify annotations or labels for the proxy service, add them to the respective
   # "annotations" or "labels" dictionaries below.
-  annotations: {}
+  annotations: 
   # If terminating TLS at the ELB, the following annotations can be used
-  # "service.beta.kubernetes.io/aws-load-balancer-backend-protocol": "*",
+  "service.beta.kubernetes.io/aws-load-balancer-backend-protocol": "*",
   # "service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled": "true",
   # "service.beta.kubernetes.io/aws-load-balancer-ssl-cert": "arn:aws:acm:REGION:ACCOUNT:certificate/XXXXXX-XXXXXXX-XXXXXXX-XXXXXXXX",
   # "service.beta.kubernetes.io/aws-load-balancer-ssl-ports": "kong-proxy-tls",
-  # "service.beta.kubernetes.io/aws-load-balancer-type": "elb"
+  "service.beta.kubernetes.io/aws-load-balancer-type": "elb"
   labels:
     enable-metrics: "true"
 
@@ -387,13 +387,13 @@ proxy:
 # You should enable this Service if you proxy UDP traffic, and configure UDP stream listens under it
 udpProxy:
   # Enable creating a Kubernetes service for UDP proxying
-  enabled: false
+  enabled: true
   type: LoadBalancer
   loadBalancerClass:
   # To specify annotations or labels for the proxy service, add them to the respective
   # "annotations" or "labels" dictionaries below.
   annotations: {}
-  #  service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
+   # service.beta.kubernetes.io/aws-load-balancer-proxy-protocol: "*"
   labels: {}
   # Optionally specify a static load balancer IP.
   # loadBalancerIP:
