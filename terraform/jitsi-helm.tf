@@ -11,7 +11,7 @@ module "jitsi" {
   create_namespace     = true
   kubernetes_namespace = "jitsi"
 
-  atomic          = true
+  atomic          = false
   cleanup_on_fail = true
   timeout         = 300
   wait            = true

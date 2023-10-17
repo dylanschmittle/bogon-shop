@@ -11,9 +11,9 @@ module "kong" {
   create_namespace     = true
   kubernetes_namespace = "kong"
 
-  atomic          = true
+  atomic          = false
   cleanup_on_fail = true
-  timeout         = 300
+  timeout         = 600
   wait            = true
 
   # These values will be deep merged

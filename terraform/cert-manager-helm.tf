@@ -11,7 +11,7 @@ module "cert-manager" {
   create_namespace     = true
   kubernetes_namespace = "cert-manager"
 
-  atomic          = true
+  atomic          = false
   cleanup_on_fail = true
   timeout         = 300
   wait            = true
