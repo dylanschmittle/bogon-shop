@@ -26,7 +26,7 @@ provider "kubernetes" {
 module "helm_release" {
   # source = "../../"
 
-  source = "cloudposse/helm-release/aws"
+  source  = "cloudposse/helm-release/aws"
   # Cloud Posse recommends pinning every module to a specific version
   # version = "x.x.x"
 

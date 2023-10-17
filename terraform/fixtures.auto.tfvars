@@ -56,32 +56,18 @@ addons = [
     resolve_conflicts_on_update = "NONE"
     service_account_role_arn    = null
   },
-  {
-    addon_name                  = "aws-ebs-csi-driver"
-    addon_version               = null
-    resolve_conflicts_on_create = "NONE"
-    resolve_conflicts_on_update = "NONE"
-    service_account_role_arn    = null
-  },
-  {
-    addon_name                  = "aws-efs-csi-driver"
-    addon_version               = null
-    resolve_conflicts_on_create = "NONE"
-    resolve_conflicts_on_update = "NONE"
-    service_account_role_arn    = null
-  },
 ]
 ## helm related
 
-repository = "https://kubernetes.github.io/ingress-nginx"
+repository = "https://aws.github.io/eks-charts/"
 
-chart = "ingress-nginx"
+chart = "aws-node-termination-handler"
 
-chart_version = "1.0.1"
+chart_version = "0.21.0"
 
 create_namespace = true
 
-kubernetes_namespace = "ingress-nginx"
+kubernetes_namespace = "test"
 
 atomic = true
 

@@ -1,6 +1,6 @@
 image:
-  repository: "ingress-nginx/ingress-nginx"
-  tag: "v1.9.3"
+  repository: "amazon/aws-node-termination-handler"
+  tag: "v1.13.3"
   pullPolicy: IfNotPresent
 
 podMonitor:
@@ -27,7 +27,7 @@ securityContext:
 
 serviceAccount:
   create: true
-  name: "ingress-nginx"
+  name: "aws-node-termination-handler"
   annotations: {}
 
 tolerations:
