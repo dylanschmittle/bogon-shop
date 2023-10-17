@@ -181,7 +181,7 @@ jvb:
   # nodePort: 10000
   service:
     enabled:
-    type: ClusterIP
+    type: LoadBalancer
     externalTrafficPolicy: Cluster
     externalIPs: []
     ## Annotations to be added to the service (if LoadBalancer is used)
