@@ -5,8 +5,8 @@ module "jitsi" {
   name = "jitsi"
 
   repository    = "https://jitsi-contrib.github.io/jitsi-helm/"
-  chart         = "jitsi"
-  chart_version = "1.3.7"
+  chart         = "jitsi-meet"
+  chart_version = "v1.3.7"
 
   create_namespace     = true
   kubernetes_namespace = "jitsi"
