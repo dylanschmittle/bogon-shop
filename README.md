@@ -14,7 +14,9 @@ arn:aws:iam::754977136847:role/AmazonEKS_EBS_CSI_DriverRole
 https://artifacthub.io/packages/helm/metrics-server/metrics-server
 kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
 
+### Ingress and TCP Ingress
 
+https://docs.konghq.com/kubernetes-ingress-controller/latest/guides/using-tcpingress/
 .
 ├── LICENSE
 ├── README.md
