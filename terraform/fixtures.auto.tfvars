@@ -15,7 +15,7 @@ enabled_cluster_log_types = ["audit"]
 
 cluster_log_retention_period = 7
 
-instance_types = ["t3.small"]
+instance_types = ["t3.medium"]
 
 desired_size = 2
 
