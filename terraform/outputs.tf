@@ -72,9 +72,9 @@ output "eks_node_group_status" {
   description = "Status of the EKS Node Group"
   value       = module.eks_node_group.eks_node_group_status
 }
-# ## helm_release
-#
-# output "metadata" {
-#   description = "Block status of the deployed release."
-#   value       = module.helm_release.metadata
-# }
+## helm_release
+
+output "metadata" {
+  description = "Block status of the deployed release."
+  value       = module.helm_release.metadata
+}
