@@ -73,15 +73,15 @@ addons = [
 ]
 ## helm related
 
-repository = "https://aws.github.io/eks-charts/"
+repository = "https://kubernetes.github.io/ingress-nginx"
 
-chart = "aws-node-termination-handler"
+chart = "ingress-nginx"
 
-chart_version = "0.21.0"
+chart_version = "1.0.1"
 
 create_namespace = true
 
-kubernetes_namespace = "test"
+kubernetes_namespace = "ingress-nginx"
 
 atomic = true
 
