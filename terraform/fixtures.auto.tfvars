@@ -57,3 +57,22 @@ addons = [
     service_account_role_arn    = null
   },
 ]
+## helm related
+
+repository = "https://aws.github.io/eks-charts/"
+
+chart = "aws-node-termination-handler"
+
+chart_version = "0.21.0"
+
+create_namespace = true
+
+kubernetes_namespace = "test"
+
+atomic = true
+
+cleanup_on_fail = true
+
+timeout = 300
+
+wait = true
