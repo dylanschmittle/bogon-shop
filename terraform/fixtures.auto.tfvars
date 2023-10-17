@@ -56,6 +56,20 @@ addons = [
     resolve_conflicts_on_update = "NONE"
     service_account_role_arn    = null
   },
+  {
+    addon_name                  = "aws-ebs-csi-driver"
+    addon_version               = null
+    resolve_conflicts_on_create = "NONE"
+    resolve_conflicts_on_update = "NONE"
+    service_account_role_arn    = null
+  },
+  {
+    addon_name                  = "aws-efs-csi-driver"
+    addon_version               = null
+    resolve_conflicts_on_create = "NONE"
+    resolve_conflicts_on_update = "NONE"
+    service_account_role_arn    = null
+  },
 ]
 ## helm related
 
