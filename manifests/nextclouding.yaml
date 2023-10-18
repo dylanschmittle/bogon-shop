@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: letsencrypt-prod
+    kubernetes.io/tls-acme: "true"
+  name: nextcloud
+  namespace: nextcloud
+spec:
+  ingressClassName: kong
+  rules:
+  - host: nextcloud.my.bogon.shop
+    http:
+      paths:
+      - backend:
+          service:
+            name: nextcloud
+            port:
+              number: 8080
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - nextcloud.my.bogon.shop
+    secretName: nextcloud-tls

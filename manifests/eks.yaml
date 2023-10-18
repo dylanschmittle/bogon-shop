@@ -1,0 +1,110 @@
+resource "helm_release" "aws_load_balancer_controller" {
+  depends_on = [
+    var.deployment_dependency,
+  ]
+  name       = "aws-load-balancer-controller"
+  namespace  = "kube-system"
+  chart      = "aws-load-balancer-controller"
+  version          = "1.4.6"
+  repository       = "https://aws.github.io/eks-charts"
+  create_namespace = false
+
+  set {
+    name  = "clusterName"
+    value = module.config.cluster_name
+  }
+
+  set {
+    name  = "serviceAccount.create"
+    value = true
+  }
+
+  set {
+    name  = "serviceAccount.name"
+    value = local.load_balancer_controller_irsa_service_account_name
+  }
+
+  set {
+    name = "serviceAccount.annotations.eks\\.amazonaws\\.com/role-arn"
+    value = module.load_balancer_controller_irsa_role.iam_role_arn
+  }
+}
+
+resource "kubernetes_ingress_v1" "main" {
+  depends_on = [
+    var.deployment_dependency,
+    helm_release.aws_load_balancer_controller,
+    module.load_balancer_controller_irsa_role
+  ]
+  wait_for_load_balancer = true
+
+  metadata {
+    name = "main"
+    annotations = {
+      "kubernetes.io/ingress.class"                                  = "alb"
+      "alb.ingress.kubernetes.io/scheme"                             = "internet-facing"
+      "alb.ingress.kubernetes.io/target-type"                        = "ip"
+      "alb.ingress.kubernetes.io/tags"                               = "Environment=${var.environment}"
+      "alb.ingress.kubernetes.io/certificate-arn"                    = join(",", var.ssl_cert_arns)
+      "external-dns.alpha.kubernetes.io/hostname"                    = "www.${module.config.tech_domain_name}"
+      "alb.ingress.kubernetes.io/listen-ports"                       = jsonencode([{ HTTP = 80 }, { HTTPS = 443 }])
+      "alb.ingress.kubernetes.io/actions.ssl-redirect"               = "443"
+      "alb.ingress.kubernetes.io/load-balancer-attributes"           = "idle_timeout.timeout_seconds=4000,routing.http2.enabled=true"
+    }
+  }
+
+  spec {
+    dynamic "rule" {
+      for_each = toset(var.ingress_services)
+      content {
+        host = "${rule.value}.${module.config.tech_domain_name}"
+        http {
+          path {
+            path = "/*"
+            backend {
+              service {
+                name = rule.value
+                port {
+                  number = 80
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+module "load_balancer_controller_irsa_role" {
+  source = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "~> 5.9.2"
+  role_name                              = local.load_balancer_controller_irsa_role_name
+  attach_load_balancer_controller_policy = true
+
+  oidc_providers = {
+    main = {
+      provider_arn               = var.oidc_provider_arn
+      namespace_service_accounts = [
+        "kube-system:${local.load_balancer_controller_irsa_service_account_name}",
+      ]
+    }
+  }
+}
+
+module "eks" {
+  source          = "terraform-aws-modules/eks/aws"
+  version         = "~> 19.0"
+  cluster_version = local.cluster_version
+  cluster_name    = var.cluster_name
+  subnet_ids      = var.private_subnets
+  vpc_id          = var.vpc_id
+  enable_irsa     = true
+  tags            = local.tags
+  cluster_endpoint_public_access = true
+  cluster_endpoint_private_access = false
+  node_security_group_enable_recommended_rules = true # <-- implements the correct 9443 sg
+
+
+
+}

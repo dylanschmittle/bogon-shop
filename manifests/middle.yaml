@@ -1,0 +1,153 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+    name: my-traefik-get-real-ip
+    namespace: gitea 
+spec:
+    plugin:
+        traefik-get-real-ip:
+            Proxy:
+                - proxyHeadername: X-From-Cdn
+                  proxyHeadervalue: cdn1
+                  realIP: X-Forwarded-For
+                - proxyHeadername: X-From-Cdn
+                  proxyHeadervalue: cdn2
+                  realIP: Client-Ip
+                - overwriteXFF: "true"
+                  proxyHeadername: X-From-Cdn
+                  proxyHeadervalue: cdn3
+                  realIP: Cf-Connecting-Ip
+                - proxyHeadername: '*'
+                  realIP: RemoteAddr
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+    name: my-plugin-log4shell
+    namespace: gitea
+spec:
+    plugin:
+        plugin-log4shell:
+            errorCode: "200"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+    name: my-geoblock
+    namespace: gitea
+spec:
+    plugin:
+        geoblock:
+            allowLocalRequests: "false"
+            allowUnknownCountries: "false"
+            api: https://get.geojs.io/v1/ip/country/{ip}
+            apiTimeoutMs: "150"
+            cacheSize: "15"
+            countries:
+                - CH
+                - RU
+            forceMonthlyUpdate: "true"
+            logAllowedRequests: "false"
+            logApiRequests: "true"
+            logLocalRequests: "false"
+            unknownCountryApiResponse: nil
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+    name: my-traefik-modsecurity-plugin
+    namespace: gitea
+spec:
+    plugin:
+        traefik-modsecurity-plugin:
+            MaxBodySize: "10485760"
+            ModsecurityUrl: http://waf:80
+            TimeoutMillis: "2000"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+    name: my-corsmiddleware
+    namespace: gitea
+spec:
+    plugin:
+        corsmiddleware:
+            allow_origins:
+                - '*.bogon.shop'
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+    name: my-souin
+    namespace: gitea
+spec:
+    plugin:
+        souin:
+            api:
+                prometheus: ""
+                souin: ""
+            default_cache:
+                headers:
+                    - Authorization
+                    - Content-Type
+                regex:
+                    exclude: ARegexHere
+                ttl: 10s
+            log_level: debug
+            urls:
+                bogon.shop/testing:
+                    headers:
+                        - Authorization
+                    ttl: 2s
+                lb.bogon.shop:
+                    headers:
+                        - Authorization
+                        - Content-Type
+                    ttl: 50s
+            ykeys:
+                The_First_Test:
+                    headers:
+                        Content-Type: .+
+                The_Second_Test:
+                    url: the/second/.+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+    name: my-traefik-real-ip
+    namespace: gitea
+spec:
+    plugin:
+        traefik-real-ip:
+            excludednets:
+                - 1.1.1.1/24
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+    name: my-crowdsec-bouncer-traefik-plugin
+    namespace: gitea
+spec:
+    plugin:
+        crowdsec-bouncer-traefik-plugin:
+            CrowdsecLapiKey: Fds6V1FLa06R01Wtvwfj42ZhaP8wM9dy7yEMatEX
+            Enabled: "true"
+
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+    name: my-fail2ban
+    namespace: gitea
+spec:
+    plugin:
+        fail2ban:
+            blacklist:
+                ip: 192.168.0.0/24
+            rules:
+                bantime: 3h
+                enabled: "true"
+                findtime: 10m
+                maxretry: "4"
+            whitelist:
+                ip: ::1,127.0.0.1

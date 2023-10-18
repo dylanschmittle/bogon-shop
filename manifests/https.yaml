@@ -1,0 +1,8 @@
+apiVersion: configuration.konghq.com/v1
+kind: KongPlugin
+metadata:
+    name: redirect-https
+    namespace: kong
+config:
+     status_code : 302
+plugin: request-termination

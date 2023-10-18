@@ -1,0 +1,32 @@
+ingress:
+  enabled: true
+  useSSL: false
+  ## annotations used by the ingress - ex for k8s nginx ingress controller:
+  ingress_annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/auth-secret: basic-auth
+    nginx.ingress.kubernetes.io/auth-realm: "Authentication Required - lab2"
+
+service:
+  http:
+    serviceType: LoadBalencer
+    port: 3000
+    externalPort: 8280
+    externalHost: git.bogon.shop
+  ssh:
+    serviceType: LoadBalencer
+    port: 22
+    externalPort: 8022
+    externalHost: bogon.shop
+
+persistence:
+  enabled: true
+  giteaSize: 10Gi
+  postgresSize: 5Gi
+  storageClass: ebs-sc
+  accessMode: ReadWriteMany
+  annotations:
+    "helm.sh/resource-policy": keep

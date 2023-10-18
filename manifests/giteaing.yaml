@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: letsencrypt-prod
+    kubernetes.io/ingress.class: kong
+    kubernetes.io/tls-acme: "true"
+    meta.helm.sh/release-name: gitea
+    meta.helm.sh/release-namespace: gitea
+  name: gitea
+  namespace: gitea
+spec:
+  ingressClassName: kong
+  rules:
+  - host: gitea.my.bogon.shop
+    http:
+      paths:
+      - backend:
+          service:
+            name: gitea-http
+            port:
+              number: 3000
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - gitea.my.bogon.shop
+    secretName: gitea-tls

@@ -1,0 +1,27 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: letsencrypt-prod
+    # kubernetes.io/ingress.class: kong
+    kubernetes.io/tls-acme: "true"
+    plugins.konghq.com: https-redirect
+  name: trilium
+  namespace: trilium
+spec:
+  ingressClassName: kong
+  rules:
+  - host: trilium.my.bogon.shop
+    http:
+      paths:
+      - backend:
+          service:
+            name: my-trilium-notes
+            port:
+              number: 10156
+        path: /
+        pathType: Prefix
+  tls:
+  - hosts:
+    - trilium.my.bogon.shop
+    secretName: trilium-tls

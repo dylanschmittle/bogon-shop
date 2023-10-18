@@ -1,36 +1,33 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: sandbox
----
-apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
-metadata:
-  name: selfsigned-issuer
-spec:
-  selfSigned: {}
----
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
-  name: my-selfsigned-ca
+  name: jitsi-my-bogon-shop
   namespace: cert-manager
 spec:
-  isCA: true
-  commonName: my-selfsigned-ca
-  secretName: root-secret
+  isCA: false
+  commonName: jitsi-my-bogon-shop
+  secretName: letsencrypt-prod
   privateKey:
     algorithm: ECDSA
     size: 256
   issuerRef:
-    name: selfsigned-issuer
+    name: letsencrypt-prod
     kind: ClusterIssuer
     group: cert-manager.io
 ---
 apiVersion: cert-manager.io/v1
-kind: ClusterIssuer
+kind: Certificate
 metadata:
-  name: my-ca-issuer
+  name: gitea-my-bogon-shop
+  namespace: cert-manager
 spec:
-  ca:
-    secretName: root-secret
+  isCA: false
+  commonName: gitea-my-bogon-shop
+  secretName: letsencrypt-prod
+  privateKey:
+    algorithm: ECDSA
+    size: 256
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+    group: cert-manager.io

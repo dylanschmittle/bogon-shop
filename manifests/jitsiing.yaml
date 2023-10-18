@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/issuer: letsencrypt-prod
+    kubernetes.io/tls-acme: "true"
+  name: jitsi
+  namespace: jitsi
+spec:
+  ingressClassName: kong
+  rules:
+  - host: jitsi.my.bogon.shop
+    http:
+      paths:
+      - backend:
+          service:
+            name: jitsi-jitsi-meet-web
+            port:
+              number: 80
+        path: /
+        pathType: ImplementationSpecific
+  tls:
+  - hosts:
+    - jitsi.my.bogon.shop
+    secretName: jitsi-tls

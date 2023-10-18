@@ -5,6 +5,10 @@
 
 ## Things that are not in the terraform yet
 
+### External DNS
+
+https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md
+
 ### EBS CSI Driver
 
 arn:aws:iam::754977136847:role/AmazonEKS_EBS_CSI_DriverRole
